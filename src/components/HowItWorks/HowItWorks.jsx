@@ -1,5 +1,36 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useUser, useClerk } from '@clerk/clerk-react'
 import styles from './HowItWorks.module.css'
+
+const clerkEnabled = Boolean(import.meta.env.VITE_CLERK_PUBLISHABLE_KEY)
+
+function AuthenticatedSkinScanLink({ className, children }) {
+  const { isSignedIn } = useUser()
+  const { openSignIn } = useClerk()
+  const navigate = useNavigate()
+
+  function handleClick(event) {
+    if (isSignedIn) {
+      event.preventDefault()
+      navigate('/skinscan')
+      return
+    }
+
+    event.preventDefault()
+    openSignIn({ afterSignInUrl: '/skinscan', afterSignUpUrl: '/skinscan' })
+  }
+
+  return <a href="/skinscan" className={className} onClick={handleClick}>{children}</a>
+}
+
+function SkinScanLink({ className, children }) {
+  if (!clerkEnabled) {
+    return <a href="/skinscan" className={className}>{children}</a>
+  }
+
+  return <AuthenticatedSkinScanLink className={className}>{children}</AuthenticatedSkinScanLink>
+}
 
 function HowItWorks() {
   return (
@@ -14,11 +45,11 @@ function HowItWorks() {
             <article className={styles.step}>
               <div className={styles.stepHeading}>
                 <span className={styles.stepNumber}>.01</span>
-                <h3>User scans the teeth, face, nails & hair</h3>
+                <h3>User scans the Skin- face</h3>
               </div>
               <div className={styles.imageWrapper}>
                 <img
-                  src="/images/t-t.png"
+                  src="/images/eczema_spot.jpeg"
                   alt="User scans their face with a phone"
                   className={styles.stepImage}
                   loading="lazy"
@@ -44,16 +75,16 @@ function HowItWorks() {
 
           <div className={styles.business}>
             <div>
-              <span className={styles.kicker}>For business</span>
-              <h3>Turn insight<br />into growth.</h3>
+              <span className={styles.kicker}>For clinics and practices</span>
+              <h3>Fewer guesswork <br />appointments.</h3>
             </div>
             <div className={styles.results}>
-              <p>Average check increase by <strong>29%</strong></p>
-              <p>Sales growth by <strong>11%</strong></p>
-              <a className={styles.demoButton} href="/partner">
-                <span>Go to demo</span>
+              <p>3 conditions pre-screened</p>
+              <p>60s average read time</p>
+              <SkinScanLink className={styles.demoButton}>
+                <span>Check my skin</span>
                 <span aria-hidden="true">↗</span>
-              </a>
+              </SkinScanLink>
             </div>
           </div>
         </div>

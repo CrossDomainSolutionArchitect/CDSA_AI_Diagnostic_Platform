@@ -18,12 +18,13 @@
 
 .checkOptions {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
 
 .checkOption {
+  min-width: 0;
   min-height: 260px;
   padding: 0.75rem;
   border: 1px solid #e1e1e1;
@@ -46,6 +47,27 @@
   font-weight: 700;
 }
 
+.status {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.activeStatus {
+  background: #d6e4c8;
+  color: #283625;
+}
+
+.comingSoonStatus {
+  background: #eeeeea;
+  color: #666;
+}
+
 .checkOption h3 {
   margin: 1.25rem 0 0.4rem;
   color: #1a1a1a;
@@ -60,14 +82,17 @@
 
 .makeupOption {
   display: grid;
-  grid-template-columns: 0.9fr 1.2fr auto;
-  align-items: center;
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
   border-radius: 14px;
   background: #1a1a1a;
   color: #fff;
+}
+
+.makeupOption > * {
+  min-width: 0;
 }
 
 .kicker {
@@ -79,20 +104,23 @@
 }
 
 .makeupOption h3 {
-  margin-top: 0.55rem;
+  margin: 0.55rem 0 0;
   font-size: 1.35rem;
   line-height: 1.15;
 }
 
 .makeupOption p {
+  margin: 0;
   color: #ddd;
   font-size: 0.82rem;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .demoLink {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
   white-space: nowrap;
   padding: 0.7rem 0.9rem;
@@ -101,10 +129,15 @@
   color: #1a1a1a;
   font-size: 0.85rem;
   font-weight: 700;
+  width: fit-content;
 }
 
 /* Upload Area */
 .uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
   border: 2px dashed #ccc;
   border-radius: 12px;
   padding: 3rem 2rem;
@@ -132,6 +165,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  text-align: center;
   gap: 0.5rem;
 }
 
