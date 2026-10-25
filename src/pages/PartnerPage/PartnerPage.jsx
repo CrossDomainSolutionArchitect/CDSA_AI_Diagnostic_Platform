@@ -8,7 +8,7 @@ function PartnerPage() {
     email: '',
     organization: '',
     role: '',
-    crops: '',
+    focus: '',
     message: '',
   })
   const [status, setStatus] = useState({ type: '', message: '' })
@@ -43,7 +43,7 @@ function PartnerPage() {
           email: '',
           organization: '',
           role: '',
-          crops: '',
+          focus: '',
           message: '',
         })
         // Optionally redirect after 3 seconds
@@ -72,9 +72,9 @@ function PartnerPage() {
         <Link to="/" className={styles.backLink}>← Back to Home</Link>
 
         <div className={styles.header}>
-          <h1>Get demo</h1>
-          <p>AI Diagnostic
-Studio</p>
+          <span className={styles.kicker}>SkinScan partner programme</span>
+          <h1>Request a pilot</h1>
+          <p>Help us validate SkinScan for Southern African skin.</p>
         </div>
 
         <div className={styles.formWrapper}>
@@ -111,7 +111,7 @@ Studio</p>
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="organization">Organization / Institution</label>
+              <label htmlFor="organization">Clinic / organisation / institution</label>
               <input
                 type="text"
                 id="organization"
@@ -131,22 +131,24 @@ Studio</p>
                 required
               >
                 <option value="">Select...</option>
-                <option value="extension_officer">Agricultural Extension Officer</option>
-                <option value="crop_scientist">Crop Scientist / Researcher</option>
-                <option value="farmer_cooperative">Farmer Cooperative Representative</option>
-                <option value="agri_business">Agri-Business Professional</option>
+                <option value="dermatologist">Dermatologist</option>
+                <option value="clinic_doctor_gp">Clinic doctor / GP</option>
+                <option value="nurse_clinic_staff">Nurse / clinic staff</option>
+                <option value="community_health_worker">Community health worker</option>
+                <option value="public_health_ngo">Public health / NGO</option>
+                <option value="researcher_academic">Researcher / academic</option>
                 <option value="other">Other</option>
               </select>
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="crops">Which crops do you work with?</label>
+              <label htmlFor="focus">Which skin conditions do you see most often?</label>
               <input
                 type="text"
-                id="crops"
-                name="crops"
-                placeholder="e.g., maize, citrus, tomatoes, potatoes"
-                value={formData.crops}
+                id="focus"
+                name="focus"
+                placeholder="e.g., acne, eczema, psoriasis, fungal infections"
+                value={formData.focus}
                 onChange={handleChange}
               />
             </div>
@@ -157,7 +159,7 @@ Studio</p>
                 id="message"
                 name="message"
                 rows="4"
-                placeholder="e.g., Provide disease images, review model outputs, connect with farming communities..."
+                placeholder="e.g., share clinical images, review model outputs, connect us with clinics or patient groups..."
                 value={formData.message}
                 onChange={handleChange}
               />
@@ -171,7 +173,7 @@ Studio</p>
               className={styles.submitBtn}
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Sending...' : 'Send Partnership Request →'}
+              {isSubmitting ? 'Sending...' : 'Request a pilot →'}
             </button>
             <p className={styles.formNote}>
               We'll respond within 48 hours from <strong>hello@cdsa.tech</strong>
