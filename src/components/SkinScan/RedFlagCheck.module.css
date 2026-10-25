@@ -1,0 +1,130 @@
+.promptCard,
+.panel {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.promptCard h3,
+.panel h3 {
+  margin: 0 0 0.5rem;
+  color: #1a1a1a;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.promptCard p,
+.intro {
+  margin: 0 0 1.25rem;
+  color: #4a4a4a;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.startBtn,
+.submitBtn {
+  border: 0;
+  border-radius: 10px;
+  background: #1a1a1a;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.startBtn {
+  padding: 0.7rem 1.1rem;
+}
+
+.startBtn:hover,
+.submitBtn:hover:not(:disabled) {
+  background: #333333;
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.questionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.questionText {
+  flex: 1;
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.answerGroup {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.4rem;
+}
+
+.answerBtn {
+  min-width: 48px;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid #cccccc;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #4a4a4a;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.answerBtn.yes {
+  border-color: #1a1a1a;
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+.answerBtn.no {
+  border-color: #c8e6c9;
+  background: #e6f4ea;
+  color: #2e7d32;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.submitBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.footnote {
+  margin: 0.85rem 0 0;
+  color: #888888;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .questionRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .answerGroup {
+    align-self: flex-end;
+  }
+}

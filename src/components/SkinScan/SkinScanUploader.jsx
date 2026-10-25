@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { predictSkinCondition } from '../../services/skinscanService'
+import RedFlagCheck from './RedFlagCheck'
+import { enrichSkinPrediction, predictSkinCondition } from '../../services/skinscanService'
 import styles from './SkinScanUploader.module.css'
 
 const checkOptions = [
@@ -30,6 +31,8 @@ function SkinScanUploader() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('')
   const [result, setResult] = useState(null)
+  const [, setRedFlagResult] = useState(null)
+  const [showRedFlags, setShowRedFlags] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -46,18 +49,26 @@ function SkinScanUploader() {
     setSelectedFile(file)
     setPreviewUrl(URL.createObjectURL(file))
     setResult(null)
+    setRedFlagResult(null)
+    setShowRedFlags(false)
     setError('')
   }
 
-  async function handleAnalyze() {
+  function handleAnalyze() {
     if (!selectedFile) return
+    setError('')
+    setShowRedFlags(true)
+  }
 
+  async function handleRedFlagComplete(redFlagData) {
+    setShowRedFlags(false)
+    setRedFlagResult(redFlagData)
     setIsLoading(true)
     setError('')
 
     try {
       const prediction = await predictSkinCondition(selectedFile)
-      setResult(prediction)
+      setResult(enrichSkinPrediction(prediction, redFlagData))
     } catch (analysisError) {
       setError(analysisError.message || 'Failed to analyze image. Please try again.')
     } finally {
@@ -65,10 +76,24 @@ function SkinScanUploader() {
     }
   }
 
+  function handleEmergency(message) {
+    setShowRedFlags(false)
+    setRedFlagResult(null)
+    setResult({
+      gated: true,
+      gateReason: 'emergency',
+      gateMessage: message,
+      nextStep: 'emergency',
+      nextStepLabel: 'Emergency - call an ambulance',
+    })
+  }
+
   function handleReset() {
     setSelectedFile(null)
     setPreviewUrl('')
     setResult(null)
+    setRedFlagResult(null)
+    setShowRedFlags(false)
     setError('')
   }
 
@@ -130,6 +155,10 @@ function SkinScanUploader() {
         </div>
       )}
 
+      {showRedFlags && (
+        <RedFlagCheck onComplete={handleRedFlagComplete} onEmergency={handleEmergency} />
+      )}
+
       {isLoading && (
         <div className={styles.loadingOverlay} role="status">
           <div className={styles.spinner} />
@@ -149,33 +178,97 @@ function SkinScanUploader() {
       {result && (
         <section className={styles.results} aria-live="polite">
           <h3>Analysis result</h3>
-          <div className={styles.diagnosisBox}>
-            <span className={styles.diagnosisLabel}>Most likely finding</span>
-            <span className={styles.diagnosisValue}>{result.diagnosis}</span>
-          </div>
-          <div className={styles.confidenceSection}>
-            <h4>Confidence</h4>
-            {result.confidences?.length ? (
+
+          {result.gateReason === 'emergency' && (
+            <div className={styles.emergencyBox}>
+              <span className={styles.emergencyIcon}>🚨</span>
+              <h3>Seek emergency care</h3>
+              <p>{result.gateMessage}</p>
+            </div>
+          )}
+
+          {result.gateReason === 'red-flag' && (
+            <div className={styles.gateMessage}>
+              <span className={styles.gateIcon}>⚠️</span>
+              <p>{result.gateMessage}</p>
+              <p className={styles.nextStepInline}><strong>Next step:</strong> {result.nextStepLabel}</p>
+            </div>
+          )}
+
+          {(result.gateReason === 'low-confidence' || result.gateReason === 'unknown-condition') && (
+            <div className={styles.gateMessage}>
+              <span className={styles.gateIcon}>⚠️</span>
+              <p>{result.gateMessage}</p>
+              <p className={styles.nextStepInline}><strong>Next step:</strong> {result.nextStepLabel}</p>
+            </div>
+          )}
+
+          {!result.gated && result.recommendation && (
+            <>
+              <div className={styles.diagnosisBox}>
+                <span className={styles.diagnosisLabel}>Likely condition:</span>
+                <span className={styles.diagnosisValue}>{result.diagnosis}</span>
+                <span className={styles.confidencePill}>{(result.topConfidence * 100).toFixed(1)}% confidence</span>
+              </div>
+
+              <div className={styles.recommendation}>
+                <div className={styles.recommendationHeader}>
+                  <h4>What this means</h4>
+                  <span className={`${styles.urgency} ${styles[result.recommendation.urgency]}`}>
+                    {result.recommendation.urgency.toUpperCase()} URGENCY
+                  </span>
+                </div>
+                <p className={styles.summary}>{result.recommendation.summary}</p>
+
+                <div className={styles.actionsBox}>
+                  <strong>What to look for</strong>
+                  <p>{result.recommendation.symptoms}</p>
+                </div>
+                <div className={styles.actionsBox}>
+                  <strong>What you can do</strong>
+                  <ul className={styles.actions}>
+                    {result.recommendation.selfCare.map((action) => <li key={action}>{action}</li>)}
+                  </ul>
+                </div>
+                <div className={styles.actionsBox}>
+                  <strong>When to see someone</strong>
+                  <ul className={styles.actions}>
+                    {result.recommendation.seeClinicIf.map((action) => <li key={action}>{action}</li>)}
+                  </ul>
+                </div>
+                <div className={styles.nextStepBox}>
+                  <span className={styles.nextStepLabel}>Recommended next step</span>
+                  <span className={styles.nextStepValue}>{result.nextStepLabel}</span>
+                </div>
+                <p className={styles.skinToneNote}>Skin tone note: {result.skinToneNote}</p>
+              </div>
+            </>
+          )}
+
+          {result.confidences?.length > 0 && (
+            <div className={styles.confidenceSection}>
+              <h4>Confidence scores</h4>
               <div className={styles.confidenceList}>
-                {result.confidences.map((confidence) => {
-                  const value = Number(confidence.confidence ?? confidence.score ?? 0)
-                  const percentage = value <= 1 ? value * 100 : value
+                {result.confidences.map((confidence, index) => {
+                  const rawValue = Number(confidence.confidence ?? confidence.score ?? 0)
+                  const percentage = rawValue > 1 ? rawValue : rawValue * 100
                   return (
-                    <div className={styles.confidenceItem} key={confidence.label}>
-                      <span className={styles.confidenceLabel}>{confidence.label}</span>
+                    <div className={styles.confidenceItem} key={confidence.label || index}>
+                      <span className={styles.confidenceLabel}>{confidence.label || 'Result'}</span>
                       <span className={styles.confidenceBar}>
-                        <span className={styles.confidenceFill} style={{ width: `${percentage}%` }} />
+                        <span className={styles.confidenceFill} style={{ width: `${Math.min(percentage, 100)}%` }} />
                       </span>
                       <span className={styles.confidenceValue}>{percentage.toFixed(1)}%</span>
                     </div>
                   )
                 })}
               </div>
-            ) : (
-              <p className={styles.noConfidence}>No confidence breakdown was returned.</p>
-            )}
-          </div>
-          <p className={styles.disclaimer}>This tool provides screening support and is not a medical diagnosis.</p>
+            </div>
+          )}
+
+          <p className={styles.disclaimer}>
+            SkinScan provides general information only. It is not a medical diagnosis and does not replace a clinician. Do not delay seeking care because of this result.
+          </p>
         </section>
       )}
     </div>

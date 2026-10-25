@@ -1,0 +1,145 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "lastUpdated": "2026-10-26",
+    "conditions": ["Acne", "Eczema", "Psoriasis"],
+    "disclaimer": "SkinScan provides general information, not a medical diagnosis. It does not replace a consultation with a qualified healthcare professional. Do not use this result to delay seeking medical care. If you are worried about your skin, see a clinician.",
+    "skinToneNote": "SkinScan is being validated for South African skin tones. AI dermatology models are typically less accurate on darker skin (Fitzpatrick IV-VI). If your result looks wrong to you, trust your judgement and see a clinician."
+  },
+  "redFlags": {
+    "emergency": [
+      {
+        "id": "breathing",
+        "question": "Are you having trouble breathing or swallowing, or is there swelling of your eyes or lips?",
+        "message": "This may be a severe allergic reaction. Call an ambulance or go to the nearest emergency department immediately."
+      }
+    ],
+    "urgent": [
+      {
+        "id": "widespread",
+        "question": "Is the rash spreading over most of your body?",
+        "message": "A rash covering most of the body needs same-day medical assessment."
+      },
+      {
+        "id": "blisters",
+        "question": "Are there blisters, open sores, or raw, weeping skin?",
+        "message": "Blisters or open skin can indicate infection or a drug reaction. See a clinic today."
+      },
+      {
+        "id": "fever",
+        "question": "Do you have a fever, or do you feel generally unwell with the rash?",
+        "message": "A rash with fever needs same-day assessment to rule out infection or a systemic reaction."
+      },
+      {
+        "id": "rapid",
+        "question": "Is the rash spreading quickly (noticeably worse within 24 hours)?",
+        "message": "A rapidly spreading rash should be assessed today."
+      },
+      {
+        "id": "painful",
+        "question": "Is the rash painful rather than just itchy?",
+        "message": "A painful rash may indicate infection or shingles. See a clinic today."
+      },
+      {
+        "id": "mucous",
+        "question": "Does the rash involve your eyes, lips, mouth, or genital skin?",
+        "message": "A rash on mucous membranes needs urgent medical assessment."
+      },
+      {
+        "id": "eczema-herpeticum",
+        "question": "If you have eczema: has it suddenly become much more painful, with clusters of small blisters or punched-out sores?",
+        "message": "This may be eczema herpeticum, a skin emergency. Go to a hospital or clinic immediately."
+      }
+    ]
+  },
+  "conditions": {
+    "Acne": {
+      "category": "inflammatory",
+      "summary": "A common condition of the hair follicles and oil glands. It can leave scars and dark marks if untreated, especially on darker skin.",
+      "symptoms": "Blackheads and whiteheads, inflamed red bumps, pustules, and in severe cases deep painful nodules or cysts.",
+      "severityGuide": {
+        "mild": "Mostly blackheads and whiteheads, with few inflamed spots.",
+        "moderate": "A mix of blackheads or whiteheads and inflamed red bumps or pustules.",
+        "severe": "Widespread deep nodules or cysts, often painful, with prominent inflammation."
+      },
+      "selfCare": [
+        "Do not squeeze or pick spots - this increases scarring and dark marks.",
+        "Wash your face twice daily with a gentle cleanser. Over-washing makes it worse.",
+        "Avoid greasy or oil-based moisturisers and cosmetics that block follicles.",
+        "Use a non-comedogenic moisturiser and sunscreen - sun damage darkens acne marks.",
+        "A topical benzoyl peroxide product can help mild acne. It takes several weeks to work."
+      ],
+      "seeClinicIf": [
+        "Acne is leaving scars or persistent dark marks.",
+        "Two 12-week courses of treatment have not worked.",
+        "Acne is affecting your mood, confidence, or daily life.",
+        "You have deep, painful nodules or cysts."
+      ],
+      "nextStep": {
+        "mild": "self-care",
+        "moderate": "see-clinic",
+        "severe": "see-dermatologist"
+      },
+      "consultExpert": true,
+      "urgency": "medium"
+    },
+    "Eczema": {
+      "category": "inflammatory",
+      "summary": "A chronic itchy skin condition that comes in flares. The skin barrier is weakened, so moisture escapes and irritants get in.",
+      "symptoms": "Dry, itchy, red patches. In flares: weeping, crusting, and thickened skin from scratching. Common on hands, inner elbows, behind knees, and face.",
+      "selfCare": [
+        "Apply emollient (moisturiser) every day - during flares and when the skin looks clear.",
+        "Use soap-free washes instead of ordinary soap.",
+        "Avoid known irritants: harsh soaps, fragranced products, wool, and very hot water.",
+        "For red, inflamed patches, a short course of topical corticosteroid is the standard treatment. Use the lowest strength that controls the flare.",
+        "Keep nails short and avoid scratching - scratching worsens the barrier and increases infection risk."
+      ],
+      "seeClinicIf": [
+        "The diagnosis is unclear.",
+        "Eczema is not controlled with daily emollients and a mild topical steroid.",
+        "There is recurrent infection (weeping, crusting, pustules, yellow discharge).",
+        "Eczema is causing significant distress, poor sleep, or missing school or work.",
+        "Eczema is widespread or affecting the face, hands, or genital area."
+      ],
+      "urgentIf": [
+        "Rapidly worsening painful eczema with clustered blisters or punched-out erosions - possible eczema herpeticum. Same-day hospital assessment."
+      ],
+      "nextStep": "see-clinic",
+      "consultExpert": true,
+      "urgency": "medium"
+    },
+    "Psoriasis": {
+      "category": "inflammatory",
+      "summary": "A chronic inflammatory condition that speeds up skin cell turnover, causing raised, scaly plaques. It is not contagious.",
+      "symptoms": "Well-defined red plaques with silvery-white scale. Common on elbows, knees, scalp, and lower back. May involve nails (pitting, separation) and joints.",
+      "selfCare": [
+        "Keep the skin moisturised - dryness worsens scaling.",
+        "Use topical treatment on plaques as directed by a clinician (corticosteroid or vitamin D analogue preparations).",
+        "Avoid scratching or picking plaques - this can cause bleeding and infection.",
+        "Sunlight in moderation can help some people, but avoid sunburn.",
+        "Address factors that worsen psoriasis: smoking, excess alcohol, and excess weight."
+      ],
+      "seeClinicIf": [
+        "Plaques are not improving after 4-8 weeks of topical treatment.",
+        "Psoriasis is widespread or severe.",
+        "The diagnosis is uncertain.",
+        "You have joint pain, stiffness, redness, or swelling - possible psoriatic arthritis.",
+        "Psoriasis is affecting your work, sleep, or social life."
+      ],
+      "urgentIf": [
+        "Severe, widespread plaques with systemic symptoms (fever, feeling very unwell).",
+        "Generalised pustular psoriasis or erythroderma - emergency assessment."
+      ],
+      "nextStep": "see-clinic",
+      "consultExpert": true,
+      "urgency": "high"
+    }
+  },
+  "nextStepLabels": {
+    "self-care": "Self-care at home",
+    "see-clinic": "See a clinic or GP",
+    "see-dermatologist": "See a dermatologist",
+    "urgent": "Seek medical care today",
+    "emergency": "Emergency - call an ambulance"
+  }
+}
